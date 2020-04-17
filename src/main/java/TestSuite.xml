@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="FacebookLiteTestSuite" parallel="tests">
+
+    <test name="Facebook Lite Sign Up ">
+        <parameter name= "platformVersion" value = "10" />
+        <parameter name= "deviceName" value = "Android Emulator" />
+        <classes>
+            <class name="FacebookLiteSignUp"/>
+        </classes>
+    </test>
+</suite>
