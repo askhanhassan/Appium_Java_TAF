@@ -1,107 +1,113 @@
 package pages;
 
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
-import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.Select;
 
 import java.util.concurrent.TimeUnit;
 
 public class SignUpPage {
 
-    private AndroidDriver<AndroidElement> androidDriver;
+    private AndroidDriver<WebElement> androidDriver;
 
-    public SignUpPage(AndroidDriver<AndroidElement> androidDriver){
+    public SignUpPage(AndroidDriver<WebElement> androidDriver){
         this.androidDriver=androidDriver;
         PageFactory.initElements(new AppiumFieldDecorator(androidDriver), this);
     }
 
-
-    @AndroidFindBy(xpath = "//android.widget.MultiAutoCompleteTextView[1]")
+    @FindBy(how = How.ID, using= "signup-button")
     @CacheLookup
-    private AndroidElement firstName_TextBox;
+    private WebElement createNewAccount_button;
 
-    @AndroidFindBy(xpath = "//android.widget.MultiAutoCompleteTextView[2]")
+    @FindBy(how = How.ID, using = "firstname_input")
     @CacheLookup
-    private AndroidElement lastName_TextBox;
+    private WebElement firstName_TextBox;
 
-    @AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc='Next']")
+    @FindBy(how = How.ID, using = "lastname_input")
     @CacheLookup
-    private AndroidElement next_Button;
+    private WebElement lastName_TextBox;
 
-    @AndroidFindBy(xpath = "//android.widget.MultiAutoCompleteTextView[1]")
+    @FindBy(how = How.XPATH, using = "//button[@data-sigil='touchable multi_step_next']")
     @CacheLookup
-    private AndroidElement mobileNumber_TextBox;
+    private WebElement next_Button;
 
-    @AndroidFindBy(xpath = "//android.widget.MultiAutoCompleteTextView[1]")
+    @FindBy(how = How.XPATH, using = "//button[@data-sigil='touchable multi_step_submit']")
     @CacheLookup
-    private AndroidElement email_TextBox;
+    private WebElement sighnUp_Button;
 
-    @AndroidFindBy(xpath = "//android.widget.MultiAutoCompleteTextView[1]")
+    @FindBy(how = How.ID, using = "contactpoint_step_input")
     @CacheLookup
-    private AndroidElement birthDate_TextBox;
+    private WebElement mobileNumber_TextBox;
 
-    @AndroidFindBy(xpath = "//android.widget.MultiAutoCompleteTextView[1]")
+    @FindBy(how = How.ID, using = "//android.widget.MultiAutoCompleteTextView[1]")
     @CacheLookup
-    private AndroidElement passWord_TextBox;
+    private WebElement email_TextBox;
+
+    @FindBy(how = How.ID, using = "day")
+    @CacheLookup
+    private WebElement birthDate_Dropdown;
+
+    @FindBy(how = How.ID, using = "month")
+    @CacheLookup
+    private WebElement birthMonth_Dropdown;
+
+    @FindBy(how = How.ID, using = "year")
+    @CacheLookup
+    private WebElement birthYear_Dropdown;
+
+    @FindBy(how = How.ID, using = "password_step_input")
+    @CacheLookup
+    private WebElement passWord_TextBox;
 
 
 
-    public void signUp(String firstName, String lastName, String mobileNumber, String email, String birthDate, String gender, String passWord ) throws Exception {
+    public void signUp(String firstName, String lastName, String mobileNumber, String birthDate,String birthMonth,String birthYear, String gender, String passWord ) throws Exception {
+
+        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        createNewAccount_button.click();
 
         androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         firstName_TextBox.sendKeys(firstName);
         System.out.println("First Name Set as : "+firstName );
-
-        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         lastName_TextBox.sendKeys(lastName);
         System.out.println("Last Name Set as : "+lastName );
-
-        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         next_Button.click();
 
-        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        mobileNumber_TextBox.clear();
-        mobileNumber_TextBox.sendKeys(mobileNumber);
-        System.out.println("Mobile Number Set as : "+mobileNumber );
-
-        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        next_Button.click();
-
-        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        email_TextBox.clear();
-        androidDriver.hideKeyboard();
-        email_TextBox.sendKeys(email);
-        System.out.println("Email Set as : "+email );
-
-        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        next_Button.click();
-
-        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        androidDriver.hideKeyboard();
-        email_TextBox.clear();
-        birthDate_TextBox.sendKeys(birthDate);
+        Select birthDateDropdown = new Select(birthDate_Dropdown);
+        birthDateDropdown.selectByVisibleText(birthDate);
         System.out.println("Birth Date Set as : "+birthDate );
 
-        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        Select birthMonthDropdown = new Select(birthMonth_Dropdown);
+        birthMonthDropdown.selectByVisibleText(birthMonth);
+        System.out.println("Birth Month Set as : "+birthMonth );
+
+        Select birthYearDropdown = new Select(birthYear_Dropdown);
+        birthYearDropdown.selectByVisibleText(birthYear);
+        System.out.println("Birth Year Set as : "+birthYear );
         next_Button.click();
 
         androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        androidDriver.findElement(By.xpath("(//android.view.ViewGroup[@content-desc='"+gender+"'])[1]")).click();
-        System.out.println("Gender Set as : "+gender );
+        mobileNumber_TextBox.sendKeys(mobileNumber);
+        System.out.println("Mobile Number Set as : "+mobileNumber );
+        next_Button.click();
 
         androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        androidDriver.findElement(By.id(gender)).click();
+        System.out.println("Gender Set as : "+gender );
         next_Button.click();
 
         androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         passWord_TextBox.sendKeys(passWord);
         System.out.println("Password Set as : "+passWord );
 
-        androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        next_Button.click();
+       androidDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+       sighnUp_Button.click();
 
 
     }

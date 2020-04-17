@@ -1,7 +1,7 @@
 package pages;
 
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.openqa.selenium.support.CacheLookup;
@@ -14,36 +14,36 @@ import java.util.concurrent.TimeUnit;
 
 public class SignInPage{
 
-    private AndroidDriver<AndroidElement> androidDriver;
+    private AndroidDriver<MobileElement> androidDriver;
 
-    public SignInPage(AndroidDriver<AndroidElement> androidDriver){
+    public SignInPage(AndroidDriver<MobileElement> androidDriver){
         this.androidDriver=androidDriver;
         PageFactory.initElements(new AppiumFieldDecorator(androidDriver), this);
     }
 
-    @AndroidFindBy(xpath = "//android.widget.MultiAutoCompleteTextView[1]")
+    @AndroidFindBy(id = "m_login_email")
     @CacheLookup
-    private AndroidElement email_TextBox;
+    private MobileElement email_TextBox;
 
-    @AndroidFindBy(xpath = "//android.widget.MultiAutoCompleteTextView[1]")
+    @AndroidFindBy(id = "m_login_password")
     @CacheLookup
-    private AndroidElement password_TextBox;
+    private MobileElement password_TextBox;
 
-    @AndroidFindBy(xpath = "//android.view.ViewGroup[4]")
+    @AndroidFindBy(id = "//android.view.ViewGroup[4]")
     @CacheLookup
-    private AndroidElement login_button;
+    private MobileElement login_button;
 
-    @AndroidFindBy(xpath = "//android.view.ViewGroup[7]")
+    @AndroidFindBy(id = "signup-button")
     @CacheLookup
-    private AndroidElement createNewAccount_button;
+    private MobileElement createNewAccount_button;
 
-    @AndroidFindBy(xpath = "//android.view.ViewGroup[2]")
+    @AndroidFindBy(id = "")
     @CacheLookup
-    private AndroidElement email_label;
+    private MobileElement email_label;
 
-    @AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc='Next']")
+    @AndroidFindBy(id = "")
     @CacheLookup
-    private AndroidElement next_Button;
+    private MobileElement next_Button;
 
 
     public void clickOnCreateNewAccontButton() throws Exception {

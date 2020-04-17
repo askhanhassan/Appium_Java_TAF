@@ -5,8 +5,9 @@
     <test name="Facebook Lite Sign Up ">
         <parameter name= "platformVersion" value = "10" />
         <parameter name= "deviceName" value = "Android Emulator" />
+        <parameter name= "browserName" value = "Chrome" />
         <classes>
-            <class name="FacebookLiteSignUp"/>
+            <class name="FacebookWebSignUp"/>
         </classes>
     </test>
 </suite>
