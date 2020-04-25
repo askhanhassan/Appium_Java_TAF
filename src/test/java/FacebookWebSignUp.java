@@ -1,88 +1,107 @@
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.openqa.selenium.WebElement;
+import Utils.Support;
+import base.AppiumController;
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Story;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
-import io.appium.java_client.android.AndroidDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.annotations.Test;
 import pages.SignUpPage;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Properties;
+import java.io.IOException;
 
-public class FacebookWebSignUp {
 
-    AndroidDriver<WebElement> androidDriver;
-    File appDirct = new File("src\\main\\resources\\");
-    InputStream input = new FileInputStream(appDirct+"\\user.properties");
-    Properties properties =new Properties();
+public class FacebookWebSignUp extends AppiumController {
 
-    public FacebookWebSignUp() throws FileNotFoundException {
-    }
+    protected static Logger logger = LogManager.getLogger(FacebookWebSignUp.class);
+    protected SignUpPage signUpPage;
+    Support support = new Support();
 
-    @Parameters({"deviceName" , "platformVersion","browserName" })
+
     @BeforeClass
-    public void setCapabilities(String deviceName,String platformVersion,String browserName ) throws MalformedURLException{
-        DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+    @Parameters({"deviceName", "platformVersion", "browserName", "platformName", "serverURL", "applicationURL"})
+    public void init(String deviceName, String platformVersion, String browserName, String platformName, String serverURL, String applicationURL) throws IOException {
 
-        desiredCapabilities.setCapability("platformName", "Android");
-        desiredCapabilities.setCapability("newCommandTimeout", "10000");
-        desiredCapabilities.setCapability("platformVersion", platformVersion);
-        desiredCapabilities.setCapability("browserName",browserName);
-        desiredCapabilities.setCapability("chromedriverExecutable","D:\\Appium_Java_TAF\\Appium_Java_TAF\\src\\main\\resources\\chromedriver.exe");
-        desiredCapabilities.setCapability("adbExecTimeout","50000");
-        desiredCapabilities.setCapability("deviceName",deviceName);
+        oprtinSystem = OperatingSystem.valueOf(platformName.toUpperCase());
+        logger.info("Operating System Name : ", oprtinSystem);
 
-        androidDriver =new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"),desiredCapabilities);
+        server = serverURL;
+        logger.info("Appium Server URL :  ", server);
+        appURL = applicationURL;
+        logger.info("Application URL :  ", appURL);
+        brwsrName = browserName;
+        logger.info("Browser Name  :  ", appURL);
 
-        System.out.println("Context Type : "+androidDriver.getContext());
-        System.out.println("Session id : " + androidDriver.getSessionId());
-        androidDriver.get("https://m.facebook.com/");
+        if (oprtinSystem.equals(OperatingSystem.ANDROID)) {
+            dvcName = deviceName;
+            logger.info("Device  Name  :  ", dvcName);
+
+            ptfmVersion = platformVersion;
+            logger.info("Platform Version  :  ", ptfmVersion);
+
+            atmnName = "UiAutomator2";
+            logger.info("Automation Name  :  ", atmnName);
+
+
+        } else if (oprtinSystem.equals(OperatingSystem.IOS)) {
+            dvcName = deviceName;
+            ptfmVersion = platformVersion;
+            atmnName = "XCUITest";
+        }
+
+        startAppium();
+
+        signUpPage = new SignUpPage(appiumDriver, webDriverWait);
 
 
     }
 
 
-    @Test
+    @Test(priority = 1, description = "Random Details used to Signup Facebook")
+    @Severity(SeverityLevel.NORMAL)
+    @Description("Random Details used to Sign up Facebook Web")
+    @Story("Facebook mobile web signup")
     public void SignUp() throws Exception {
 
-        SignUpPage signUpPage = new SignUpPage(androidDriver);
+        signUpPage.clickCreateNewAccount();
 
-        properties.load(input);
-        String firstName = RandonString();
-        String lastName = RandonString();
-        long mobileNumber = RandonInteger() ;
-        signUpPage.signUp(firstName,lastName,Long.toString(mobileNumber),properties.getProperty("birthDate"),properties.getProperty("birthMonth"),properties.getProperty("birthYear"),properties.getProperty("gender"),properties.getProperty("passWord"));
+        signUpPage.setFirstName(support.RandomString(7));
+
+        signUpPage.setLastName(support.RandomString(7));
+
+        signUpPage.clickNext();
+
+        signUpPage.setBirthDate("22");
+        signUpPage.setBirthMonth("Jul");
+        signUpPage.setBirthYear("1993");
+
+        signUpPage.clickNext();
+
+        signUpPage.setMobileNumber(Long.toString(support.RandonInteger()));
+
+        signUpPage.clickNext();
+
+        appiumDriver.findElement(By.id("Male")).click();
+        signUpPage.clickNext();
+        signUpPage.setPassword("1qaz2wsx#");
+        support.getScreenshot(appiumDriver);
+        signUpPage.clickSignUp();
+
 
     }
+
 
     @AfterClass
-    public void shutDown(){
-       androidDriver.quit();
+    public void shutDown() {
+        stopAppium();
     }
 
 
-    public String RandonString() {
-
-        int length = 7;
-        boolean useLetters = true;
-        boolean useNumbers = false;
-        String generatedString = RandomStringUtils.random(length, useLetters, useNumbers);
-        System.out.println(generatedString);
-        return  generatedString;
-    }
-
-    public long RandonInteger() {
-
-        return (long)(Math.random()*100000 + 3333300000L);
-    }
 }
 
 
