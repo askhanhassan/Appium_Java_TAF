@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="FacebookLiteTestSuite" parallel="tests">
-
-    <test name="Facebook Lite Sign Up ">
-        <parameter name= "platformVersion" value = "10" />
-        <parameter name= "deviceName" value = "Android Emulator" />
-        <parameter name= "browserName" value = "Chrome" />
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="FaceBookSignUp" thread-count="100" verbose="1" parallel="tests" annotations="JDK">
+    <parameter name="serverURL" value="http://127.0.0.1:4723/wd/hub" />
+    <parameter name="browserName" value="Chrome" />
+    <parameter name="applicationURL" value="https://m.facebook.com/" />
+    <test name="SignUp">
+        <parameter name="deviceName" value="Android Emulator" />
+        <parameter name="platformVersion" value="10" />
+        <parameter name="platformName" value="Android" />
+        <classes>
+            <class name="FacebookWebSignUp"/>
+        </classes>
+    </test>
+    <test name="SignUpIOS">
+        <parameter name="deviceName" value=" " />
+        <parameter name="platformVersion" value=" " />
+        <parameter name="platformName" value=" " />
         <classes>
             <class name="FacebookWebSignUp"/>
         </classes>
